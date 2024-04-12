@@ -53,7 +53,9 @@
 #include <freetype/freetype.h>
 #include <harfbuzz/hb.h>
 #include <harfbuzz/hb-ft.h>
+#ifdef BARD_HARFBUZZ_ICU
 #include <harfbuzz/hb-icu.h>
+#endif
 #include <cairo/cairo.h>
 #include <cairo/cairo-ft.h>
 #endif
