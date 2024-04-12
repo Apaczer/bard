@@ -198,6 +198,7 @@ AC_SUBST(DLLWRAP)
 AC_SUBST(NM)
 AC_SUBST(LEXDEFS)
 AC_SUBST(VOXDEFS)
+AC_SUBST(SDK)
 
 case "$host_cpu" in
      i386|i486|i586|i686)
@@ -456,7 +457,7 @@ dnl harfbuzz support
 dnl
 AC_CHECK_HEADER(harfbuzz/hb.h,
                 [HBDEFS=-DBARD_HARFBUZZ
-                 HBINCS="-I/usr/include/freetype2"
+                 HBINCS="$($SDK/usr/bin/pkg-config --cflags-only-I freetype2)"
                  HBLIBS="-lfreetype -lcairo"])
 dnl Some versions don't have harfbuzz-icu
 AC_CHECK_LIB(harfbuzz,
@@ -467,31 +468,22 @@ AC_CHECK_LIB(harfbuzz,
 dnl
 dnl SDL support
 dnl
-dnl AC_CHECK_HEADER(SDL/SDL.h,,[AC_MSG_ERROR([Cannot locate SDL/SDL.h])])
-if ! test -f /usr/include/SDL/SDL.h; then
-    AC_MSG_ERROR("Cannot locate /usr/include/SDL/SDL.h.")
-fi
+AC_CHECK_HEADER(SDL/SDL.h,,[AC_MSG_ERROR([Cannot locate SDL/SDL.h])])
 
 SDLLIBS="-lSDL_mixer -lSDL"
 
-dnl Fix this ....
-if ! test -f /usr/include/SDL/SDL_ttf.h; then
-    AC_MSG_ERROR("Cannot locate /usr/include/SDL/SDL_ttf.h.")
-fi
+AC_CHECK_HEADER(SDL/SDL.h,,[AC_MSG_ERROR([Cannot locate SDL/SDL_ttf.h])])
+
 SDLLIBS="-lSDL_ttf $SDLLIBS"
 
-dnl AC_CHECK_HEADER(SDL/SDL_ttf.h,,[AC_MSG_ERROR([Cannot locate SDL/SDL_ttf.h])])
 if ! test "x$EPUBDEFS" = x; then
-   if test -f /usr/include/SDL/SDL_image.h -a -f /usr/include/SDL/SDL_rotozoom.h
-   then
-       echo "EPUB (with SDL images) support found"
-       SDLLIBS="-lSDL_gfx -lSDL_image $SDLLIBS"
-       EPUBDEFS="-DBARD_EPUB_IMAGES $EPUBDEFS"
-   else
-       echo "EPUB (without SDL images) support found"
-   fi
+   AC_CHECK_HEADERS(SDL/SDL_image.h SDL/SDL_rotozoom.h,
+                   [AC_MSG_NOTICE([EPUB (with SDL images) support found])
+                   SDLLIBS="-lSDL_gfx -lSDL_image $SDLLIBS"
+                   EPUBDEFS="-DBARD_EPUB_IMAGES $EPUBDEFS"],
+                   [AC_MSG_NOTICE([EPUB (without SDL images) support found])])
 else
-   echo "No EPUB support found (missing libzip)"
+   AC_MSG_NOTICE([No EPUB support found (missing libzip)])
 fi
 
 AC_SUBST(SDLLIBS)
@@ -563,6 +555,11 @@ AC_ARG_WITH( langvox,
 	[  --with-langvox          with subsets of lang, lex and voices ],
         FL_LANGVOX=$with_langvox )
 AC_SUBST(FL_LANGVOX)
+
+dnl
+dnl extra env variables
+dnl
+AC_ARG_VAR([SDK],[path to your SDK directory for cross-compilation])
 
 AC_CONFIG_FILES([config/config config/system.mak])
 AC_OUTPUT

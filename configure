@@ -643,6 +643,7 @@ SHFLAGS
 OTHERLIBS
 HOST_CPU
 HOST_OS
+SDK
 VOXDEFS
 LEXDEFS
 NM
@@ -739,7 +740,8 @@ CFLAGS
 LDFLAGS
 LIBS
 CPPFLAGS
-CPP'
+CPP
+SDK'
 
 
 # Initialize some variables set by options.
@@ -1374,6 +1376,7 @@ Some influential environment variables:
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
+  SDK         path to your SDK directory for cross-compilation
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -4137,6 +4140,7 @@ esac
 
 
 
+
 case "$host_cpu" in
      i386|i486|i586|i686)
 	HOST_CPU=i386
@@ -4412,7 +4416,7 @@ fi
 ac_fn_c_check_header_mongrel "$LINENO" "harfbuzz/hb.h" "ac_cv_header_harfbuzz_hb_h" "$ac_includes_default"
 if test "x$ac_cv_header_harfbuzz_hb_h" = xyes; then :
   HBDEFS=-DBARD_HARFBUZZ
-                 HBINCS="-I/usr/include/freetype2"
+                 HBINCS="$($SDK/usr/bin/pkg-config --cflags-only-I freetype2)"
                  HBLIBS="-lfreetype -lcairo"
 fi
 
@@ -4460,28 +4464,51 @@ else
 fi
 
 
-if ! test -f /usr/include/SDL/SDL.h; then
-    as_fn_error $? "\"Cannot locate /usr/include/SDL/SDL.h.\"" "$LINENO" 5
+ac_fn_c_check_header_mongrel "$LINENO" "SDL/SDL.h" "ac_cv_header_SDL_SDL_h" "$ac_includes_default"
+if test "x$ac_cv_header_SDL_SDL_h" = xyes; then :
+
+else
+  as_fn_error $? "Cannot locate SDL/SDL.h" "$LINENO" 5
 fi
+
+
 
 SDLLIBS="-lSDL_mixer -lSDL"
 
-if ! test -f /usr/include/SDL/SDL_ttf.h; then
-    as_fn_error $? "\"Cannot locate /usr/include/SDL/SDL_ttf.h.\"" "$LINENO" 5
+ac_fn_c_check_header_mongrel "$LINENO" "SDL/SDL.h" "ac_cv_header_SDL_SDL_h" "$ac_includes_default"
+if test "x$ac_cv_header_SDL_SDL_h" = xyes; then :
+
+else
+  as_fn_error $? "Cannot locate SDL/SDL_ttf.h" "$LINENO" 5
 fi
+
+
+
 SDLLIBS="-lSDL_ttf $SDLLIBS"
 
 if ! test "x$EPUBDEFS" = x; then
-   if test -f /usr/include/SDL/SDL_image.h -a -f /usr/include/SDL/SDL_rotozoom.h
-   then
-       echo "EPUB (with SDL images) support found"
-       SDLLIBS="-lSDL_gfx -lSDL_image $SDLLIBS"
-       EPUBDEFS="-DBARD_EPUB_IMAGES $EPUBDEFS"
-   else
-       echo "EPUB (without SDL images) support found"
-   fi
+   for ac_header in SDL/SDL_image.h SDL/SDL_rotozoom.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+ { $as_echo "$as_me:${as_lineno-$LINENO}: EPUB (with SDL images) support found" >&5
+$as_echo "$as_me: EPUB (with SDL images) support found" >&6;}
+                   SDLLIBS="-lSDL_gfx -lSDL_image $SDLLIBS"
+                   EPUBDEFS="-DBARD_EPUB_IMAGES $EPUBDEFS"
 else
-   echo "No EPUB support found (missing libzip)"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: EPUB (without SDL images) support found" >&5
+$as_echo "$as_me: EPUB (without SDL images) support found" >&6;}
+fi
+
+done
+
+else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: No EPUB support found (missing libzip)" >&5
+$as_echo "$as_me: No EPUB support found (missing libzip)" >&6;}
 fi
 
 
@@ -4558,6 +4585,8 @@ FL_LANGVOX="default"
 if test "${with_langvox+set}" = set; then :
   withval=$with_langvox; FL_LANGVOX=$with_langvox
 fi
+
+
 
 
 
