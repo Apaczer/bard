@@ -459,11 +459,17 @@ AC_CHECK_HEADER(harfbuzz/hb.h,
                 [HBDEFS=-DBARD_HARFBUZZ
                  HBINCS="$($SDK/usr/bin/pkg-config --cflags-only-I freetype2)"
                  HBLIBS="-lfreetype -lcairo"])
-dnl Some versions don't have harfbuzz-icu
+dnl Some versions don't have harfbuzz-icu or even ICU support at all
 AC_CHECK_LIB(harfbuzz,
                 hb_icu_get_unicode_funcs,
-                [HBLIBS+=" -lharfbuzz"],
-                [HBLIBS+=" -lharfbuzz -lharfbuzz-icu"])
+                [HBDEFS+=" -DBARD_HARFBUZZ_ICU"
+                HBLIBS+=" -lharfbuzz"],
+                [AC_CHECK_LIB(harfbuzz-icu,
+                                 hb_icu_get_unicode_funcs, 
+                                 [HBDEFS+=" -DBARD_HARFBUZZ_ICU"
+                                 HBLIBS+=" -lharfbuzz -lharfbuzz-icu"],
+                                 [AC_MSG_NOTICE([no ICU support found in harfbuzz])
+                                 HBLIBS+=" -lharfbuzz"])])
 
 dnl
 dnl SDL support

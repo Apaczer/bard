@@ -349,7 +349,9 @@ bard_surface *bard_render_text(bard_font *bf,char *text,SDL_Color c)
     /* Set up the harfbuzz buffer for the characters */
     b = hb_buffer_create();
     /* Its going to be unicode */
+#ifdef BARD_HARFBUZZ_ICU
     hb_buffer_set_unicode_funcs(b,hb_icu_get_unicode_funcs());
+#endif
     /* or -- which might avoid icu4c dependency */
     /* hb_buffer_set_unicode_funcs(b,hb_glib_get_unicode_funcs()); */
     /* Copy in the font/language parameters */
