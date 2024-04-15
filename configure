@@ -632,6 +632,7 @@ HBDEFS
 EPUBDEFS
 EPUBLIBS
 SDLLIBS
+FLITELIBSDIR
 FLITEDIR
 PLATFORM_DEFS
 AUDIOLIBS
@@ -4011,6 +4012,7 @@ case "$target_cpu" in
      ;;
 esac
 TARGET_OS=$target_os
+TARGET_PLATFORM=$target_cpu-$target_os
 
 M68KCC=
 M68KCLAGS=
@@ -4390,7 +4392,7 @@ fi
 PLATFORM_DEFS=
 
 
-if test "x$FLITEDIR" = x; then
+if test "x$FLITEDIR" = x && test "$build_os" = "$target_os"; then
   if test -f /usr/include/flite.h; then
     FLITEDIR=/usr
   fi
@@ -4401,9 +4403,24 @@ if test "x$FLITEDIR" = x; then
   fi
 fi
 if test "x$FLITEDIR" = x; then
-    as_fn_error $? "\"Cannot locate CMU Flite specify FLITEDIR explicitly.\"" "$LINENO" 5
+  if test -f "$PWD/flite/include/flite.h"; then
+    FLITEDIR="$PWD/flite"
+  fi
+fi
+if test "x$FLITEDIR" = x; then
+    as_fn_error $? "Cannot locate CMU Flite specify FLITEDIR explicitly." "$LINENO" 5
 fi
 echo CMU Flite found in $FLITEDIR
+
+
+if test -f /usr/local/lib/libflite.a && test "$build_os" = "$target_os"; then
+    FLITELIBSDIR="/usr/local/lib"
+elif test -f $FLITEDIR/build/$TARGET_PLATFORM/lib/libflite.a; then
+    FLITELIBSDIR="$FLITEDIR/build/$TARGET_PLATFORM/lib"
+else
+    as_fn_error $? "Cannot locate CMU Flite libraries, please configure and build flite pkg dependency." "$LINENO" 5
+fi
+echo CMU Flite libraries found in $FLITELIBSDIR
 
 
 ac_fn_c_check_header_mongrel "$LINENO" "zip.h" "ac_cv_header_zip_h" "$ac_includes_default"
