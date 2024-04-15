@@ -78,17 +78,19 @@ For epub images you also need
 
 COMPILATION
 
-    git clone https://github.com/festvox/flite
+    git clone <current_repo_URL>
+    git submodule update --init --recursive
     cd flite
     ./configure && make && make voices
     export FLITEDIR=`pwd`
     cd ..
 
-    git clone https://github.com/festvox/bard
     cd bard
     ./configure
     make
-   ./bin/bard -voices_dir $FLITEDIR/voices
+
+    # run program:
+    ./bin/bard -voices_dir $FLITEDIR/voices
 
 Bard requires access to a .ttf font, at configuration time it tries to find 
 this in /usr/share/fonts, but it might not succeed in finding the right one.
