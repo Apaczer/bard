@@ -92,6 +92,43 @@ COMPILATION
     # run program:
     ./bin/bard -voices_dir $FLITEDIR/voices
 
+CROSS-COMPILATION (MIYOOCFW)
+
+Clone this repo and initialize submodules
+```
+git clone <current_repo_URL>
+git submodule update --init --recursive
+```
+- Local build (*)(**)
+```
+cd flite
+export SDK=/opt/miyoo
+CC=${SDK}/usr/bin/arm-linux-gcc \
+./configure --host=arm-linux && make
+cd ..
+
+CC=/opt/miyoo/usr/bin/arm-linux-gcc SDK=/opt/miyoo \
+DEFAULTFONT=/usr/share/fonts/dejavu/DejaVuSans.ttf \
+./configure --host=arm-linux
+make
+```
+- Docker build (**)
+```
+docker run --volume ./:/src/ -it miyoocfw/toolchain-shared-<libc>`
+cd /src/flite
+./configure --host=arm-linux && make
+cd ..
+
+DEFAULTFONT=/usr/share/fonts/dejavu/DejaVuSans.ttf \
+./configure --host=arm-linux SDK=/opt/miyoo
+make
+```
+
+\* Note: To change default SDK path (`/opt/miyoo`) run "relocate-sdk.sh".
+\* Note2: Use shared libraries of your SDK choice.  
+
+INFO
+
 Bard requires access to a .ttf font, at configuration time it tries to find 
 this in /usr/share/fonts, but it might not succeed in finding the right one.
 You can edit config/config and add a (full) pathname to a .ttf font.
