@@ -4580,25 +4580,28 @@ fi
 
 
 
-if test "x$DEFAULTFONT" = "x"
+if test "$build_os" = "$target_os"
 then
-   DEFAULTFONT=`find /usr/share/fonts -name LiberationSerif-Regular.ttf | head -1`
-fi
-if test "x$DEFAULTFONT" = "x"
-then
-   DEFAULTFONT=`find /usr/share/fonts -name DejaVuSerif.ttf | head -1`
-fi
-if test "x$DEFAULTFONT" = "x"
-then
-   DEFAULTFONT=`find /usr/share/fonts -name DroidSerif.ttf | head -1`
-fi
-if test "x$DEFAULTFONT" = "x"
-then
-   DEFAULTFONT=`find /system/fonts -name DroidSerif.ttf | head -1`
-fi
-if test "x$DEFAULTFONT" = "x"
-then
-    DEFAULTFONT=`find /usr/share/fonts -name NtmRR4nh.ttf | head -1`
+   if test "x$DEFAULTFONT" = "x"
+   then
+      DEFAULTFONT=`find /usr/share/fonts -name LiberationSerif-Regular.ttf | head -1`
+   fi
+   if test "x$DEFAULTFONT" = "x"
+   then
+      DEFAULTFONT=`find /usr/share/fonts -name DejaVuSerif.ttf | head -1`
+   fi
+   if test "x$DEFAULTFONT" = "x"
+   then
+      DEFAULTFONT=`find /usr/share/fonts -name DroidSerif.ttf | head -1`
+   fi
+      if test "x$DEFAULTFONT" = "x"
+   then
+      DEFAULTFONT=`find /system/fonts -name DroidSerif.ttf | head -1`
+   fi
+      if test "x$DEFAULTFONT" = "x"
+   then
+      DEFAULTFONT=`find /usr/share/fonts -name NtmRR4nh.ttf | head -1`
+   fi
 fi
 if test "x$DEFAULTFONT" = "x"; then
    echo No installed font found
