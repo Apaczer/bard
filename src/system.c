@@ -170,7 +170,7 @@ char *bard_get_battery(const char *bs)
 
 void bard_screen_off(const char *backlight_off)
 {
-#if !defined (BSD) && !defined (_WIN32) && !defined (MSDOS)
+#if !defined (BSD) && !defined (_WIN32) && !defined (MSDOS) && !defined(MIYOO)
     /* Switches off LCD */
     cst_file f;
 
@@ -185,6 +185,17 @@ void bard_screen_off(const char *backlight_off)
             cst_fclose(f);
         }
     }
+#elif defined (MIYOO)
+    /* Switches off LCD */
+    cst_file f;
+
+    /* This is right for MiyooCFW */
+    f = cst_fopen("/sys/devices/platform/backlight/backlight/backlight/brightness",CST_OPEN_WRITE);
+    if (f)
+    {
+        cst_fprintf(f,"0\n");
+        cst_fclose(f);
+    }
 #endif
     
     if (bard_debug)
@@ -195,7 +206,7 @@ void bard_screen_off(const char *backlight_off)
 
 void bard_screen_on(const char *backlight_on)
 {
-#if !defined (BSD) && !defined (_WIN32) && !defined (MSDOS)
+#if !defined (BSD) && !defined (_WIN32) && !defined (MSDOS) && !defined (MIYOO)
     /* Switches on LCD */
     cst_file f;
 
@@ -209,6 +220,25 @@ void bard_screen_on(const char *backlight_on)
             cst_fprintf(f,"0\n");
             cst_fclose(f);
         }
+    }
+#elif defined (MIYOO)
+    /* Switches on LCD */
+    cst_file f, fb;
+    char lid[4];
+
+    /* This is right for MiyooCFW */
+    f = cst_fopen("/sys/devices/platform/backlight/backlight/backlight/brightness",CST_OPEN_WRITE);
+    if (f)
+    {
+        fb = cst_fopen("/mnt/.backlight.conf",CST_OPEN_READ);
+        if (fb) {
+            cst_fread(fb,lid,sizeof(lid),1);
+            cst_fwrite(f,lid,sizeof(lid),1);
+            cst_fclose(fb);
+        } else {
+            cst_fprintf(f,"10\n");
+        }
+        cst_fclose(f);
     }
 #endif
 
