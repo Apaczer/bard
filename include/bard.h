@@ -51,7 +51,7 @@
 #define BARD_DEFAULT_FONT "/usr/share/fonts/liberation/LiberationSerif-Regular.ttf"
 #endif
 #define BARD_DEFAULT_FONT_SIZE 20
-#ifdef GCW0
+#if defined (GCW0) || defined (MIYOO)
 /* Some screens are too small, so its good to have a reasonable (device
    specific) size to the user can see the options */
 #define BARD_DEFAULT_MENU_FONT_SIZE 16

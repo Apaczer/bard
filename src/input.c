@@ -39,6 +39,7 @@
 /*                                                                       */
 /*  -DPANDORA  Openpandora (game console keys and keyboard)              */
 /*  -DGCW0     GCW-Zero (game console keys only)                         */
+/*  -DMIYOO    MiyooCFW (game console keys only)                         */
 /*  none       Ben Nanonote                                              */
 /*  none       Standard desktop (with standard keyboard)                 */
 /*                                                                       */
@@ -85,7 +86,7 @@ int input_process_events(bard_reader *br)
 		  SDL_GetKeyName(event.key.keysym.sym)); */
             if ((event.key.keysym.sym != SDLK_SPACE) &&
                 (event.key.keysym.sym != SDLK_END) &&
-#ifndef GCW0
+#if !defined (GCW0) && !defined (MIYOO)
                 (event.key.keysym.sym != SDLK_RETURN) &&
 #endif
                 (event.key.keysym.sym != SDLK_HOME) &&
@@ -97,7 +98,7 @@ int input_process_events(bard_reader *br)
                 (event.key.keysym.sym != SDLK_RSHIFT) &&
                 (event.key.keysym.sym != SDLK_RCTRL) &&
 #endif
-#ifdef GCW0
+#if defined (GCW0) || defined (MIYOO)
                 (event.key.keysym.sym != SDLK_BACKSPACE) &&
                 (event.key.keysym.sym != SDLK_LSHIFT) &&
                 (event.key.keysym.sym != SDLK_LCTRL) &&
@@ -110,8 +111,11 @@ int input_process_events(bard_reader *br)
             }
             switch (event.key.keysym.sym)
             {
-#ifndef GCW0
+#if !defined (GCW0) && !defined (MIYOO)
             case SDLK_ESCAPE:
+#endif
+#ifdef MIYOO
+            case SDLK_RCTRL:
 #endif
             case SDLK_q:
                 br->quit=1;
@@ -119,8 +123,10 @@ int input_process_events(bard_reader *br)
             case SDLK_p:
                 br->pause ^= 1;          /* flip pause state */
                 break;
-#ifdef GCW0
+#if defined (GCW0)
             case SDLK_LSHIFT:            /* A on GCW0 */
+#elif defined (MIYOO)
+            case SDLK_LSHIFT:            /* X on MIYOO */
 #else
             case SDLK_TAB:
             case SDLK_HOME:              /* SQUARE on Pandora */
@@ -134,7 +140,7 @@ int input_process_events(bard_reader *br)
                 else
                     br->speak = 0;
                 break;
-#ifndef GCW0
+#if !defined (GCW0) && !defined (MIYOO)
             case SDLK_SPACE:         
                 if (br->display->current == br->text)
                 {
@@ -147,8 +153,8 @@ int input_process_events(bard_reader *br)
 #ifdef PANDORA
             case SDLK_LALT:              /* START on Pandora */
 #endif
-#ifdef GCW0
-            case SDLK_RETURN:            /* START on GCW0 */
+#if defined (GCW0) || defined (MIYOO)
+            case SDLK_RETURN:            /* START on GCW0 & MiyooCFW*/
 #else
             case SDLK_t:                 /* display text screen */
 #endif
@@ -200,8 +206,8 @@ int input_process_events(bard_reader *br)
 #ifdef PANDORA
             case SDLK_LCTRL:         /* MENU key on Pandora */
 #endif
-#ifdef GCW0
-            case SDLK_ESCAPE:        /* SELECT key on GCW0 */
+#if defined (GCW0) || defined (MIYOO)
+            case SDLK_ESCAPE:        /* SELECT key on GCW0 & MiyooCFW */
 #else
             case SDLK_m:             /* display menu screen */
 #endif
@@ -234,8 +240,10 @@ int input_process_events(bard_reader *br)
                        br->display->current = br->text;
                 }   
                 break;
-#ifdef GCW0
-            case SDLK_LCTRL:         /* X on GCW0 */
+#if defined (GCW0)
+            case SDLK_LCTRL:         /* X on GCW0 & MiyooCFW*/
+#elif defined (MIYOO)
+            case SDLK_LALT:         /* A on MiyooCFW */
 #else
             case SDLK_END:           /* CIRCLE on Pandora */
             case SDLK_RETURN:
@@ -263,9 +271,9 @@ int input_process_events(bard_reader *br)
 #ifdef PANDORA
             case SDLK_RSHIFT:        /* L1 on Pandora */
 #endif
-#ifdef GCW0
-            case SDLK_TAB:           /* L1 on GCW0 */
-#endif	      
+#if defined (GCW0) || defined (MIYOO)
+            case SDLK_TAB:           /* L1 on GCW0 & MiyooCFW*/
+#endif
             case SDLK_i:
                 /* Increase scroll speed, volume, font size */
                 if ((br->display->current == br->text) && (br->scroll))
@@ -286,8 +294,8 @@ int input_process_events(bard_reader *br)
 #ifdef PANDORA
             case SDLK_RCTRL:             /* R1 on Pandora */
 #endif
-#ifdef GCW0
-            case SDLK_BACKSPACE:         /* R1 on GCW0 */
+#if defined (GCW0) || defined (MIYOO)
+            case SDLK_BACKSPACE:         /* R1 on GCW0 & MiyooCFW*/
 #endif
             case SDLK_o:
                 /* Decrease scroll speed, volume, font size */
@@ -331,8 +339,8 @@ int input_process_events(bard_reader *br)
                 if (event.key.keysym.mod != KMOD_NUM)
                    bard_window_display_from_pos(cw,0);
                 break;
-#ifdef GCW0
-            case SDLK_SPACE:         /* Y on GCW0 */
+#if defined (GCW0) || defined (MIYOO)
+            case SDLK_SPACE:         /* Y on GCW0 & MiyooCFW*/
 #else
             case SDLK_PAGEUP:        /* X on Pandora */
 #endif
@@ -342,8 +350,10 @@ int input_process_events(bard_reader *br)
                 if (event.key.keysym.mod != KMOD_NUM)
                    bard_window_page_up(cw);
                 break;
-#ifdef GCW0
+#if defined (GCW0)
             case SDLK_LALT:          /* B on GCW0 */
+#elif defined (MIYOO)
+            case SDLK_LCTRL:         /* B on MiyooCFW */
 #else
             case SDLK_PAGEDOWN:      /* Triangle on Pandora */
 #endif

@@ -109,7 +109,7 @@ cd ..
 
 CC=/opt/miyoo/usr/bin/arm-linux-gcc SDK=/opt/miyoo \
 DEFAULTFONT=/usr/share/fonts/dejavu/DejaVuSans.ttf \
-./configure --host=arm-linux
+./configure --host=arm-linux CPPFLAGS=-DMIYOO
 make
 ```
 - Docker build (**)
@@ -120,7 +120,7 @@ cd /src/flite
 cd ..
 
 DEFAULTFONT=/usr/share/fonts/dejavu/DejaVuSans.ttf \
-./configure --host=arm-linux SDK=/opt/miyoo
+./configure --host=arm-linux SDK=/opt/miyoo CPPFLAGS=-DMIYOO
 make
 ```
 

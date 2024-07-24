@@ -39,8 +39,13 @@
 static const char *bard_help_string =
 "Bard Storyteller: Help\n"
 "\n"
+#if defined (GCW0) || defined (MIYOO)
 #ifdef GCW0
 "GCW-Zero Game Console:\n"
+#endif
+#ifdef MIYOO
+"MiyooCFW Game Console:\n"
+#endif
 "select  Menu of other windows\n"
 "start   Return to main text window\n"
 "A       toggle scrolling/select\n"
@@ -50,6 +55,9 @@ static const char *bard_help_string =
 "R1/L1    Increase/Decrease font/speech/volume\n"
 "d-pad and A to select in Menu window\n"
 "d-pad in General Menu to select position etc\n"
+#endif
+#ifdef MIYOO
+"RESET/HOME    Quit\n"
 #endif
 "Keyboard:\n"
 "tab   Toggle speaking\n"

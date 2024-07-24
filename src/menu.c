@@ -87,7 +87,7 @@ bard_window *bard_make_menu_window(bard_reader *br)
     /* so we allow for device specific setting here */
     font_size = 
         get_param_int(br->config,"-menu_font_size",
-#ifdef GCW0
+#if defined (GCW0) || defined (MIYOO)
                       BARD_DEFAULT_MENU_FONT_SIZE
 #else
                       get_param_int(br->config,"-font_size", 

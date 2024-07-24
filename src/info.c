@@ -134,7 +134,7 @@ bard_window *bard_make_info_window(bard_reader *br)
     iw->y_offset = indent;
     font_name = get_param_string(br->config,"-font",BARD_DEFAULT_FONT);
     font_size = get_param_int(br->config,"-info_font_size",
-#ifdef GCW0
+#if defined (GCW0) || defined (MIYOO)
                       BARD_DEFAULT_MENU_FONT_SIZE
 #else
                       get_param_int(br->config,"-font_size", 
