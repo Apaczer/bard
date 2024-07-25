@@ -64,7 +64,7 @@ bard_window *bard_make_text_window(bard_reader *br)
         /* There might be a language specific text window font */
         get_param_string(br->config,"-text_font",
                          get_param_string(br->config,"-font",BARD_DEFAULT_FONT));
-    font_size = get_param_int(br->config,"-font_size",20);
+    font_size = get_param_int(br->config,"-font_size",BARD_DEFAULT_FONT_SIZE);
     bard_font_set(&tw->font,font_name,font_size,BARD_FONT_STYLE_NORMAL);
 
     tw->textfile = cst_strdup(get_param_string(br->config,"-text","<no file>"));

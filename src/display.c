@@ -38,6 +38,7 @@
 #include "bard_render.h"
 #include "bard_window.h"
 #include "bard_color.h"
+#include "bard.h"
 
 static void bard_display_hardware_screen_size(bard_display *d);
 
@@ -45,7 +46,7 @@ bard_display *bard_display_open(cst_features *config)
 {
     bard_display *display;
     int screen_width, screen_height;
-    int default_font_size;
+    int default_font_size = BARD_DEFAULT_FONT_SIZE;
     const char *font_name;
 
     display = cst_alloc(bard_display,1);
