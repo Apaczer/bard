@@ -108,8 +108,8 @@ CC=${SDK}/usr/bin/arm-linux-gcc \
 cd ..
 
 CC=/opt/miyoo/usr/bin/arm-linux-gcc SDK=/opt/miyoo \
-DEFAULTFONT=/usr/share/fonts/dejavu/DejaVuSans.ttf \
-./configure --host=arm-linux CPPFLAGS=-DMIYOO
+DEFAULTFONT=/usr/share/fonts/liberation/LiberationSans-Bold.ttf \
+./configure --host=arm-linux CPPFLAGS="-DMIYOO -DBARD_DEFAULT_TEXT_FONT='\"/usr/share/fonts/dejavu/DejaVuSans.ttf\"'"
 make
 ```
 - Docker build (**)
