@@ -50,12 +50,19 @@
 #ifndef BARD_DEFAULT_FONT
 #define BARD_DEFAULT_FONT "/usr/share/fonts/liberation/LiberationSerif-Regular.ttf"
 #endif
+#if defined (MIYOO)
+#define BARD_DEFAULT_FONT_SIZE 16
+#else
 #define BARD_DEFAULT_FONT_SIZE 20
-#if defined (GCW0) || defined (MIYOO)
+#endif
+#if defined (GCW0)
 /* Some screens are too small, so its good to have a reasonable (device
    specific) size to the user can see the options */
 #define BARD_DEFAULT_MENU_FONT_SIZE 16
 #define BARD_DEFAULT_INFO_FONT_SIZE 19
+#elif defined (MIYOO)
+#define BARD_DEFAULT_MENU_FONT_SIZE 14
+#define BARD_DEFAULT_INFO_FONT_SIZE 16
 #else
 #define BARD_DEFAULT_MENU_FONT_SIZE BARD_DEFAULT_FONT_SIZE
 #define BARD_DEFAULT_INFO_FONT_SIZE BARD_DEFAULT_FONT_SIZE

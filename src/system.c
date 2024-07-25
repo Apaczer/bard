@@ -70,7 +70,11 @@ const char *bard_config_dir(void)
 {
     const char *home;
 
+#ifdef MIYOO
+    home = bard_getenv("PWD");
+#else
     home = bard_getenv("HOME");
+#endif
     if (!home) home = ".";
     return home;
 }
