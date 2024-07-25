@@ -213,7 +213,7 @@ static int bard_audio_stream_chunk(const cst_wave *w, int start_index,
         }
     } while ((br->pause == 1) || (GLOBAL_write_pos-GLOBAL_read_pos > bs));
 
-#ifndef GCW0
+#if !defined (GCW0) && !defined (MIYOO)
     /* When screenblank happens on GCW0 you get grshh sounds, it's probably
        something more complex than just screenblank, so don't do the 
        screenblank on that platform */
