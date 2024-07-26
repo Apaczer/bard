@@ -1,0 +1,35 @@
+
+Help for Bard on MiyooCFW
+
+Bard Storyteller is a text reader.  Bard not only allows a user to read books, but also can read books to the user using text-to-speech.
+
+Basic Use
+On the MiyooCFW, use the game controller keys or external keyboard
+
+Y page up
+
+B page down
+
+A start/stop scrolling (or select in menus)
+
+X start/stop speaking
+
+SELECT menu of sub-screens
+
+START return to main text screen or show info
+
+L increase font/speed/volume
+
+R decrease font/speed/volume
+
+Bard can read txt, html and epub files.
+
+Bard saves its context in a configuration file ($PWD/.bard_config) across sessions, remembering the files you are reading, the position you are at, and which voice you selected.
+
+You can select a file to read from the File menu, press SELECT then use the d-pad to move to the File selection menu, press A to select the menu, then again use the d-pad and A to select a File/Directory to navigate to the File in your file systems.  It will remember that directory for future File selections.
+
+Bard uses CMU's Flite Speech Synthesizer System to render the text as speech.  Three core voices are included: slt (US female), rms (US male) and awb.  The default voice, kal, using an older technology, is also available.
+
+Bard Storyteller is free software, distributed under a BSD-like license. The source is available from http://festvox.org/bard.
+
+

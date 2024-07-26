@@ -1,3 +1,4 @@
+*.ipk
 bin/bard
 build/
 config.log

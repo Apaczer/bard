@@ -97,6 +97,7 @@ CROSS-COMPILATION (MIYOOCFW)
 Clone this repo and initialize submodules
 ```
 git clone <current_repo_URL>
+cd <current_repo_name>
 git submodule update --init --recursive
 ```
 - Local build (*)(**)
@@ -104,24 +105,27 @@ git submodule update --init --recursive
 cd flite
 export SDK=/opt/miyoo
 CC=${SDK}/usr/bin/arm-linux-gcc \
-./configure --host=arm-linux && make
+./configure --host=arm-linux && make -j$(nproc)
 cd ..
 
 CC=/opt/miyoo/usr/bin/arm-linux-gcc SDK=/opt/miyoo \
 DEFAULTFONT=/usr/share/fonts/liberation/LiberationSans-Bold.ttf \
 ./configure --host=arm-linux CPPFLAGS="-DMIYOO -DBARD_DEFAULT_TEXT_FONT='\"/usr/share/fonts/dejavu/DejaVuSans.ttf\"'"
-make
+make -j$(nproc)
+cd miyoo && make -j$(nproc)
 ```
 - Docker build (**)
 ```
-docker run --volume ./:/src/ -it miyoocfw/toolchain-shared-<libc>`
+docker run --volume ./:/src/ -it miyoocfw/toolchain-shared-<libc>
 cd /src/flite
-./configure --host=arm-linux && make
+./configure --host=arm-linux && make -j$(nproc)
 cd ..
 
-DEFAULTFONT=/usr/share/fonts/dejavu/DejaVuSans.ttf \
-./configure --host=arm-linux SDK=/opt/miyoo CPPFLAGS=-DMIYOO
-make
+export SDK=/opt/miyoo
+DEFAULTFONT=/usr/share/fonts/liberation/LiberationSans-Bold.ttf \
+./configure --host=arm-linux CPPFLAGS="-DMIYOO -DBARD_DEFAULT_TEXT_FONT='\"/usr/share/fonts/dejavu/DejaVuSans.ttf\"'"
+make -j$(nproc)
+cd miyoo && make -j$(nproc)
 ```
 
 \* Note: To change default SDK path (`/opt/miyoo`) run "relocate-sdk.sh".
